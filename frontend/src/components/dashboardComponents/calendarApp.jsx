@@ -5,6 +5,8 @@ import Cookies from "js-cookie";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Notification from "./notification";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import "./calendarApp.css";
 
@@ -58,7 +60,11 @@ const CalendarApp = () => {
       });
 
       if (response.ok) {
-        alert('Events added  successfully!')
+        // alert('')
+        toast.success("Events added  successfully!", {
+          position: "top-center",
+          autoClose: 2000,
+        });
         console.log("Events successfully sent to backend.");
         console.log(response);
         
@@ -85,8 +91,11 @@ const CalendarApp = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert('Upcoming date updated successfully!')
-        console.log(data.message); // Success message
+        // alert('')
+        toast.success("Upcoming date updated successfully!", {
+          position: "top-center",
+          autoClose: 2000,
+        });
         
       } else {
         console.error(data.message); // Error message
@@ -98,6 +107,7 @@ const CalendarApp = () => {
 
   return (
     <>
+    <ToastContainer/>
       <div className="">
         <div className="container">
           <div className="calendar-container">

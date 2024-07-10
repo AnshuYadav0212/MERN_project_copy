@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 import Cookies from "js-cookie";
 
-function WashermanDashboard() {
+function WashermanDashboard(){
     const navigate = useNavigate();
     const infoCookie = Cookies.get('info');
     const user = infoCookie ? JSON.parse(decodeURIComponent(infoCookie)) : null;

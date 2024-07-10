@@ -17,12 +17,19 @@ function Login() {
 
     const verifyUser = async () => {
         let body;
-        if(userType === 'student') {
-            body = {roll: username, pass: password};
-        } else {
-            body = {contact: username, pass: password};
+        let url;
+        if (userType === 'student') {
+            body = { roll: username, pass: password };
+            url = '/session/student/login';
+        } else if (userType === 'washerman') {
+            body = { contact: username, pass: password };
+            url = '/session/washerman/login';
+        } else if (userType === 'admin') {
+            body = { username, password };
+            url = '/session/admin/login';
         }
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/session/${userType}/login`, {
+    
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -30,12 +37,13 @@ function Login() {
             credentials: 'include',
             body: JSON.stringify(body)
         });
-
+    
         if (response.ok) {
             return true;
         }
         return false;
-    }
+    };
+    
 
     const handleUsernameChange = (event) => {
         setUsername(event.target.value);

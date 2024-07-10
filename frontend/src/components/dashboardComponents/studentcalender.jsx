@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from 'axios';
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { useNavigate } from 'react-router-dom';
@@ -16,15 +17,36 @@ const StudentCalendar = () => {
     const [clothesMap, setClothesMap] = useState({});
     const [openDialog, setOpenDialog] = useState(false);
     const [clothesForDate, setClothesForDate] = useState([]);
+    const [dueAmount, setDueAmount] = useState(0);
+    const [student, setStudent] = useState({ name: '', phone: '' });
     const navigate = useNavigate();
 
     useEffect(() => {
+        fetchStudentInfo();
         fetchData();
+        fetchDueAmount();
     }, []);
+
+    const fetchStudentInfo = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/student/fetchNameandDueAmount`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Student Info:", data);
+                setStudent(data);
+            } else {
+                console.error("Failed to fetch student info");
+            }
+        } catch (error) {
+            console.error("Error fetching student info:", error);
+        }
+    };
 
     const fetchData = async () => {
         try {
-            // Fetch all dates
             const datesResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/student/fetchDates`, {
                 method: 'GET',
                 credentials: 'include'
@@ -33,7 +55,6 @@ const StudentCalendar = () => {
                 const datesJson = await datesResponse.json();
                 setHighlightedDates(datesJson.dates);
 
-                // Fetch clothes records for each date
                 const clothesData = await Promise.all(datesJson.dates.map(async date => {
                     const clothesResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/student/fetchRecord`, {
                         method: 'POST',
@@ -54,18 +75,34 @@ const StudentCalendar = () => {
                     }
                 }));
 
-                // Construct a map with date as key and clothes as value
                 const clothesMap = {};
                 clothesData.forEach(({ date, clothes }) => {
                     clothesMap[date] = clothes;
                 });
                 setClothesMap(clothesMap);
-                console.log(clothesMap);
             } else {
                 console.error("Failed to fetch dates");
             }
         } catch (error) {
             console.error("Error fetching data:", error);
+        }
+    };
+
+    const fetchDueAmount = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/student/fetchDueAmount`, {
+                method: 'GET',
+                credentials: 'include',
+            });
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Due Amount:", data);
+                setDueAmount(data.dueAmount);
+            } else {
+                console.error("Failed to fetch due amount");
+            }
+        } catch (error) {
+            console.error("Error fetching due amount:", error);
         }
     };
 
@@ -81,20 +118,85 @@ const StudentCalendar = () => {
 
     const handleWashClothes = () => {
         navigate("/WashClothes");
-    }
+    };
 
+    const handlePayDues = async () => {
+        const paymentMethod = prompt("Enter payment method (cash or online):");
+    
+        if (paymentMethod !== null) {
+            const paymentMethodLower = paymentMethod.toLowerCase();
+            let phone = null;
+    
+            if (paymentMethodLower === "online") {
+                phone = prompt("Enter your phone number for payment:");
+            }
+    
+            try {
+                if (paymentMethodLower === "online" && phone !== null) {
+                    const data = {
+                        name: student.name,
+                        amount: dueAmount,
+                        number: phone,
+                        MUID: 'MUID' + Date.now(),
+                        transactionID: 'TRID' + Date.now()
+                    };
+                    console.log("Data to be sent for online payment:", data);
+    
+                    const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/order`, data);
+                    if (response.data.success) {
+                        window.location.href = response.data.data.instrumentResponse.redirectInfo.url;
+                    } else {
+                        console.error("Online payment failed:", response.data.message);
+                    }
+    
+                } else if (paymentMethodLower === "cash") {
+                    const cashDueAmount = prompt("Enter the due amount:");
+                    if (cashDueAmount !== null) {
+                        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/student/requestCash`, {
+                            method: 'POST',
+                            credentials: 'include',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ dueAmountcash: cashDueAmount }),
+                        });
+    
+                        const contentType = response.headers.get('content-type');
+                        if (contentType && contentType.includes('application/json')) {
+                            const data = await response.json();
+                            console.log("Response from requestCash API:", data);
+    
+                            if (response.ok && data.success) {
+                                alert("Payment request sent to washerman for cash payment.");
+                            } else {
+                                console.error("Failed to send cash payment request:", data.message);
+                            }
+                        } else {
+                            const text = await response.text();
+                            console.error("Unexpected response format:", text);
+                        }
+                    }
+                } else {
+                    console.error("Invalid payment method");
+                }
+            } catch (error) {
+                console.error("Error initiating payment:", error);
+            }
+        } else {
+            console.log("Prompt was cancelled");
+        }
+    };
 
     return (
-        <div className="">
-            <div className="">
-                <div className="calendar-container">
+        <div>
+            <div className="calendar-container">
                 <Calendar
                     className="calender"
                     value={selectedDate}
                     onClickDay={handleDateClick}
                     tileClassName={({ date, view }) => {
                         const dateString = date.toDateString();
-                        if(!highlightedDates.includes(dateString)) {
+                        if (!highlightedDates.includes(dateString)) {
                             return "";
                         }
                         if (clothesMap[dateString] && clothesMap[dateString][0] && clothesMap[dateString][0].accept) {
@@ -104,7 +206,6 @@ const StudentCalendar = () => {
                         }
                     }}
                 />
-                </div>
             </div>
             <Dialog open={openDialog} onClose={handleCloseDialog}>
                 <DialogTitle>Clothes for {selectedDate && selectedDate.toDateString()}</DialogTitle>
@@ -125,10 +226,9 @@ const StudentCalendar = () => {
                 </DialogContent>
             </Dialog>
             <div className='flex pt-3'>
-            <a href="https://rzp.io/l/SIdstorK">
-                <Button variant='contained' className='print-button' >
-                   Pay dues
-                </Button></a>
+                <Button variant='contained' className='print-button' onClick={handlePayDues}>
+                    Pay dues
+                </Button>
                 <Button variant='contained' className='cloths-button' onClick={handleWashClothes}>
                     Wash Clothes
                 </Button>

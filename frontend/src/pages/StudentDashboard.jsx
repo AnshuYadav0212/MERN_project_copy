@@ -12,7 +12,7 @@ function StudentDashboard(){
 
     function onLogout() {
         Cookies.remove('info');
-        const response = fetch(`${process.env.REACT_APP_BACKEND_URL}/session/logout`, {
+        const response = fetch('/session/logout', {
             method: "GET",
             credentials: "include",
         });

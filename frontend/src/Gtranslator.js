@@ -6,7 +6,8 @@ const Layout = ({ children }) => {
 
   useEffect(() => {
     const script = document.createElement("script");
-    script.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+    script.src =
+      "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
     script.async = true;
     document.body.appendChild(script);
 
@@ -15,8 +16,9 @@ const Layout = ({ children }) => {
         {
           pageLanguage: "en",
           autoDisplay: false,
-          layout: window.google.translate.TranslateElement.InlineLayout.HORIZONTAL,
-          includedLanguages: "en,hi"
+          layout:
+            window.google.translate.TranslateElement.InlineLayout.HORIZONTAL,
+          includedLanguages: "en,hi",
         },
         googleTranslateRef.current
       );
@@ -48,7 +50,9 @@ const Layout = ({ children }) => {
       document.head.appendChild(style);
 
       // Remove "Powered by Google" link
-      const poweredByGoogle = document.querySelector(".VIpgJd-ZVi9od-l4eHX-hSRGPd");
+      const poweredByGoogle = document.querySelector(
+        ".VIpgJd-ZVi9od-l4eHX-hSRGPd"
+      );
       if (poweredByGoogle) {
         poweredByGoogle.parentElement.style.display = "none";
       }
@@ -64,11 +68,11 @@ const Layout = ({ children }) => {
     const languageDropdown = document.querySelector(".goog-te-combo");
     if (languageDropdown) {
       if (isHindi) {
-        console.log('To English')
+        console.log("To English");
         languageDropdown.value = "en";
         languageDropdown.dispatchEvent(new Event("change", { bubbles: true }));
       } else {
-        console.log('To Hindi')
+        console.log("To Hindi");
         languageDropdown.value = "hi";
         languageDropdown.dispatchEvent(new Event("change", { bubbles: true }));
       }
@@ -81,7 +85,15 @@ const Layout = ({ children }) => {
       <noscript>You need to enable JavaScript to run this app.</noscript>
       <div id="google_translate_element" ref={googleTranslateRef}></div>
       <button className="translate-button" onClick={toggleLanguage}>
-        {isHindi ? <span data-lang="en" className="notranslate">Eng</span> : <span data-lang="hi" className="notranslate">हिंदी</span>}
+        {isHindi ? (
+          <span data-lang="en" className="notranslate">
+            Eng
+          </span>
+        ) : (
+          <span data-lang="hi" className="notranslate">
+            हिंदी
+          </span>
+        )}
       </button>
       {children}
     </div>

@@ -84,7 +84,20 @@
 .back-button-container button:hover {
   text-decoration: underline;
 }
+.info-row {
+  display: flex;
+ 
+  margin-bottom: 5px;
+}
+.info-label {
+  font-weight: bold;
+  flex: 1;
+}
 
+.info-value {
+  text-align: right;
+  flex: 1;
+}
 .hall,
 .wing {
   font-size: large;

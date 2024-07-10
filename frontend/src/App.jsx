@@ -1,38 +1,71 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Layout from "./components/translate";
-import NotFound from "./pages/NotFound";
-import LandingPage from "./pages/LandingPage";
-import Login from "./pages/Login";
-import ResetPassword from "./pages/ResetPassword";
-import RegisterStudent from "./pages/RegisterStudent";
-import WashermanSelection from "./pages/WashermanSelection";
-import StudentDashboard from "./pages/StudentDashboard";
-import WashClothes from "./pages/WashClothes";
-import WashermanDashboard from "./pages/WashermanDashboard";
-import SummaryPage from "./pages/SummaryPage";
-import Collectcloths from "./pages/Collectcloths";
+import React from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import './App.css';
 
-const App = () => {
-  return (
-    <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/ResetPassword" element={<ResetPassword />} />
-          <Route path="/RegisterStudent" element={<RegisterStudent />} />
-          <Route path="/WashermanSelection" element={<WashermanSelection />} />
-          <Route path="/StudentDashboard" element={<StudentDashboard />} />
-          <Route path="/WashClothes" element={<WashClothes />} />
-          <Route path="/WashermanDashboard" element={<WashermanDashboard />} />
-          <Route path="/Washerman/PrintSummary" element={<SummaryPage />} />
-          <Route path="/Washerman/Collect" element={<Collectcloths />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Layout>
-    </Router>
-  );
-};
+//importing pages
+import NotFound from './pages/NotFound';
+import LandingPage from './pages/LandingPage';
+import Login from './pages/Login';
+import WashermanSelection from './pages/WashermanSelection';
+import RegisterStudent from './pages/RegisterStudent';
+import ResetPassword from './pages/ResetPassword';
+import StudentDashboard from './pages/StudentDashboard';
+import WashermanDashboard from './pages/WashermanDashboard';
+import WashClothes from './pages/WashClothes';
+import SummaryPage from './pages/SummaryPage';
+import Collectcloths from './pages/Collectcloths';
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <LandingPage />,
+        errorElement: <NotFound />
+    },
+    {
+        path: '/login',
+        element: <Login />,
+    },
+    {
+        path: '/ResetPassword',
+        element: <ResetPassword />,
+    },
+    {
+        path: '/RegisterStudent',
+        element: <RegisterStudent />,
+    },
+    {
+        path: '/WashermanSelection',
+        element: <WashermanSelection />,
+    },
+    {
+        path: '/StudentDashboard',
+        element: <StudentDashboard />,
+    },
+    {
+        path: '/WashClothes',
+        element: <WashClothes />,
+    },
+    {
+        path: '/WashermanDashboard',
+        element: <WashermanDashboard />,
+    },
+    {
+        path: '/Washerman/PrintSummary',
+        element :  <SummaryPage/>,
+    },
+    {
+        path:'/Washerman/Collect',
+        element:<Collectcloths/>
+    },
+    {
+        path: '*',
+        element: <NotFound />
+    }
+]);
+
+const App = () =>{
+    return (
+        <RouterProvider  router={router} />
+    );
+}
 
 export default App;

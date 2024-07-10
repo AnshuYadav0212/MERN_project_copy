@@ -1,37 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import  '../styles/SummaryPage.css';
+import '../styles/SummaryPage.css';
 import Cookies from 'js-cookie';
-import Button from '@mui/material/Button'; 
+import Button from '@mui/material/Button';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 const SummaryPage = () => {
   const [summaryData, setSummaryData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [pdfUrl, setPdfUrl] = useState('');
   const hall = Cookies.get('selectedHall');
   const wing = Cookies.get('selectedWing');
+  const navigate = useNavigate();
 
-const navigate = useNavigate();
-const backButton=()=>{
+  const backButton = () => {
+    navigate("/WashermanDashboard");
+  };
 
-   navigate("/WashermanDashboard")
-}
   useEffect(() => {
     const fetchSummaryData = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/washerman/wing/fetchSummary`,
-    {
-        method: 'POST',
-        headers: {
+        const response = await fetch('/washerman/wing/fetchSummary', {
+          method: 'POST',
+          headers: {
             'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ hall, wing }),
-        
-    });
+          },
+          credentials: 'include',
+          body: JSON.stringify({ hall, wing }),
+        });
+
         if (!response.ok) {
           throw new Error('Failed to fetch summary data');
         }
+
         const data = await response.json();
         setSummaryData(data.summary);
         setLoading(false);
@@ -42,34 +45,50 @@ const backButton=()=>{
     };
 
     fetchSummaryData();
-  },[]);
-if(loading)
-{
-  return <div className="cloth-collection loading">Loading...</div>;
-}
-if(error)
-{
-    return <div>Error: {error}</div>
-}
-return (
-  
-      
+  }, [hall, wing]);
+
+  const handleGetPdf = async () => {
+    try {
+      const response = await axios.post('/washerman/wing/printSummary', { hall, wing }, { responseType: 'blob' });
+
+      const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      setPdfUrl(pdfUrl);
+
+      // Open the PDF in a new window
+      window.open(pdfUrl);
+
+      // Optionally, if you want to provide a download link:
+      const link = document.createElement('a');
+      link.href = pdfUrl;
+      link.setAttribute('download', 'summary.pdf');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error fetching PDF:', error);
+    }
+  };
+
+  if (loading) {
+    return <div className="cloth-collection loading">Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  return (
     <div>
-      <Button variant="contained" startIcon={<ArrowBackIcon />}onClick={backButton}  >
+      <Button variant="contained" startIcon={<ArrowBackIcon />} onClick={backButton}>
         Back
       </Button>
       <h1><strong>Summary Page</strong></h1>
-      {loading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p>{error}</p>
-      ) : summaryData.length === 0 ? (
-        <p>No summary data available</p>
-      ) : (
-        <table>
+      <div className="summary-table-container">
+        <table className="summary-table">
           <thead>
             <tr>
-              <th>Name</th>
+              <th>Student Name</th>
               <th>Wing</th>
               <th>Hall</th>
               <th>Total Clothes</th>
@@ -78,21 +97,23 @@ return (
             </tr>
           </thead>
           <tbody>
-            {summaryData.map((data, index) => (
+            {summaryData.map((item, index) => (
               <tr key={index}>
-                <td>{data.Name}</td>
-                <td>{data.Wing}</td>
-                <td>{data.Hall}</td>
-                <td>{data['Total Clothes']}</td>
-                <td>{data['Total Dues']}</td>
-                <td>{data.Month}</td>
+                <td>{item.Name}</td>
+                <td>{item.Wing}</td>
+                <td>{item.Hall}</td>
+                <td>{item["Total Clothes"]}</td>
+                <td>{item["Total Dues"]}</td>
+                <td>{item.Month}</td>
               </tr>
             ))}
           </tbody>
         </table>
-      )}
+      </div>
+      <Button variant="contained" onClick={handleGetPdf}>
+        Print Summary
+      </Button>
     </div>
-    
   );
 };
 
