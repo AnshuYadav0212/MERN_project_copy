@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 import Cookies from "js-cookie";
 
+const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||'http://localhost:8080';
+
 function WashermanDashboard(){
     const navigate = useNavigate();
     const infoCookie = Cookies.get('info');
@@ -16,7 +18,7 @@ function WashermanDashboard(){
         Cookies.remove('info');
         Cookies.remove('selectedHall');
         Cookies.remove('selectedWing');
-        const response = fetch(`${process.env.REACT_APP_BACKEND_URL}/session/washerman/logout`, {
+        const response = fetch(`${BACKEND_URL}/session/washerman/logout`, {
             method: "GET",
             credentials: "include",
         });
