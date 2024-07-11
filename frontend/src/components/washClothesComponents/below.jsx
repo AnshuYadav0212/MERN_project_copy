@@ -4,6 +4,8 @@ import Button from '@mui/material/Button';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||'http://localhost:8080';
+
 const Below = ({ counter }) => {
     const [total, setTotal] = useState(0);
     const [Ctotal, setCtotal] = useState(0);
@@ -33,7 +35,7 @@ const Below = ({ counter }) => {
         console.log("Washing Clothes");
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/student/requestWash`, {
+            const response = await fetch(`${BACKEND_URL}/student/requestWash`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -113,3 +115,4 @@ const Below = ({ counter }) => {
 };
 
 export default Below;
+
