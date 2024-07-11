@@ -4,7 +4,7 @@ import CalendarTop2 from "../components/dashboardComponents/calendarTop2";
 import StudentCalendar from "../components/dashboardComponents/studentcalender";
 import { useNavigate } from 'react-router-dom';
 
-const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||'http://localhost:8080';
+const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||'http://localhost:8000';
 function StudentDashboard(){
    const navigate = useNavigate();
    
