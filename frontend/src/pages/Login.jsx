@@ -5,6 +5,8 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+
+const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||'http://localhost:8080';
 function Login() {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
@@ -20,13 +22,13 @@ function Login() {
         let url;
         if (userType === 'student') {
             body = { roll: username, pass: password };
-            url = '/session/student/login';
+            url =  `${BACKEND_URL}/session/student/login`;
         } else if (userType === 'washerman') {
             body = { contact: username, pass: password };
-            url = '/session/washerman/login';
+            url = `${BACKEND_URL}/session/washerman/login`;
         } else if (userType === 'admin') {
             body = { username, password };
-            url = '/session/admin/login';
+            url = `${BACKEND_URL}/session/admin/login`;
         }
     
         const response = await fetch(url, {
