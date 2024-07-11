@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaArrowLeft } from 'react-icons/fa';
 import '../styles/resetPassword.css';
 
+const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||'http://localhost:8080';
+
 function ResetPassword() {
 
     const [formData, setFormData] = useState({
@@ -45,7 +47,7 @@ function ResetPassword() {
         }
         else {
             const sendOtp = async () => {
-                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/sendAuthCode`, {
+                const response = await fetch(`${BACKEND_URL}/sendAuthCode`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -73,7 +75,7 @@ function ResetPassword() {
 
     const handleReset = async () => {
         const resetPwd = async () => {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/student/resetPassword`, {
+            const response = await fetch(`${BACKEND_URL}/student/resetPassword`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -199,3 +201,4 @@ function ResetPassword() {
     )
 }
 export default ResetPassword;
+
