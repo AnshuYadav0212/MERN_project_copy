@@ -11,6 +11,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import "./calendarApp.css";
 import './footerwashdash.css';
 
+const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||"http://localhost:8080";
+
 const StudentCalendar = () => {
     const [selectedDate, setSelectedDate] = useState(null);
     const [highlightedDates, setHighlightedDates] = useState([]);
@@ -29,7 +31,7 @@ const StudentCalendar = () => {
 
     const fetchStudentInfo = async () => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/student/fetchNameandDueAmount`, {
+            const response = await fetch(`${BACKEND_URL}/student/fetchNameandDueAmount`, {
                 method: 'GET',
                 credentials: 'include'
             });
@@ -47,7 +49,7 @@ const StudentCalendar = () => {
 
     const fetchData = async () => {
         try {
-            const datesResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/student/fetchDates`, {
+            const datesResponse = await fetch(`${BACKEND_URL}/student/fetchDates`, {
                 method: 'GET',
                 credentials: 'include'
             });
@@ -56,7 +58,7 @@ const StudentCalendar = () => {
                 setHighlightedDates(datesJson.dates);
 
                 const clothesData = await Promise.all(datesJson.dates.map(async date => {
-                    const clothesResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/student/fetchRecord`, {
+                    const clothesResponse = await fetch(`${BACKEND_URL}/student/fetchRecord`, {
                         method: 'POST',
                         credentials: 'include',
                         headers: {
@@ -90,7 +92,7 @@ const StudentCalendar = () => {
 
     const fetchDueAmount = async () => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/student/fetchDueAmount`, {
+            const response = await fetch(`${BACKEND_URL}/student/fetchDueAmount`, {
                 method: 'GET',
                 credentials: 'include',
             });
@@ -142,7 +144,7 @@ const StudentCalendar = () => {
                     };
                     console.log("Data to be sent for online payment:", data);
     
-                    const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/order`, data);
+                    const response = await axios.post(`${BACKEND_URL}/order`, data);
                     if (response.data.success) {
                         window.location.href = response.data.data.instrumentResponse.redirectInfo.url;
                     } else {
@@ -152,7 +154,7 @@ const StudentCalendar = () => {
                 } else if (paymentMethodLower === "cash") {
                     const cashDueAmount = prompt("Enter the due amount:");
                     if (cashDueAmount !== null) {
-                        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/student/requestCash`, {
+                        const response = await fetch(`${BACKEND_URL}/student/requestCash`, {
                             method: 'POST',
                             credentials: 'include',
                             headers: {
