@@ -6,6 +6,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||'http://localhost:8080';
+
 const SummaryPage = () => {
   const [summaryData, setSummaryData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,7 +24,7 @@ const SummaryPage = () => {
   useEffect(() => {
     const fetchSummaryData = async () => {
       try {
-        const response = await fetch('/washerman/wing/fetchSummary', {
+        const response = await fetch(`${BACKEND_URL}/washerman/wing/fetchSummary`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -49,7 +51,7 @@ const SummaryPage = () => {
 
   const handleGetPdf = async () => {
     try {
-      const response = await axios.post('/washerman/wing/printSummary', { hall, wing }, { responseType: 'blob' });
+      const response = await axios.post(`${BACKEND_URL}/washerman/wing/printSummary`, { hall, wing }, { responseType: 'blob' });
 
       const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
       const pdfUrl = URL.createObjectURL(pdfBlob);
