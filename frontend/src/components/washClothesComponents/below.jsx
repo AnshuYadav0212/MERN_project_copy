@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||'http://localhost:8080';
+const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||'http://localhost:8000';
 
 const Below = ({ counter }) => {
     const [total, setTotal] = useState(0);
