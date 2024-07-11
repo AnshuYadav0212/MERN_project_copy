@@ -6,7 +6,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||'http://localhost:8080';
+const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||'http://localhost:8000';
 
 const SummaryPage = () => {
   const [summaryData, setSummaryData] = useState([]);
