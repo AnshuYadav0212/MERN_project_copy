@@ -4,6 +4,7 @@ import CalendarTop2 from "../components/dashboardComponents/calendarTop2";
 import StudentCalendar from "../components/dashboardComponents/studentcalender";
 import { useNavigate } from 'react-router-dom';
 
+const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||'http://localhost:8080';
 function StudentDashboard(){
    const navigate = useNavigate();
    
@@ -12,7 +13,7 @@ function StudentDashboard(){
 
     function onLogout() {
         Cookies.remove('info');
-        const response = fetch('/session/logout', {
+        const response = fetch(`${BACKEND_URL}/session/logout`, {
             method: "GET",
             credentials: "include",
         });
