@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import "./calendarApp.css";
 
+const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||'http://localhost:8080';
 const CalendarApp = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [eventName, setEventName] = useState("visiting");
@@ -46,7 +47,7 @@ const CalendarApp = () => {
 
   const addEvents = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/washerman/wing/addEvents`,{
+      const response = await fetch(`${BACKEND_URL}/washerman/wing/addEvents`,{
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -79,7 +80,7 @@ const CalendarApp = () => {
   };
   const updateUpcomingDate = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/washerman/upcomingDate`, {
+      const response = await fetch(`${BACKEND_URL}/washerman/upcomingDate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
