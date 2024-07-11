@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||'http://localhost:8080';
+
 const Collectcloths = () => {
     const [records, setRecords] = useState([]);
     const [cashPayments, setCashPayments] = useState([]);
@@ -18,7 +20,7 @@ const Collectcloths = () => {
 
     const fetchRecords = useCallback(async () => {
         try {
-            const response = await fetch('/washerman/wing/collectCloths', {
+            const response = await fetch(`${BACKEND_URL}/washerman/wing/collectCloths`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -46,7 +48,7 @@ const Collectcloths = () => {
     }, [hall, wing]);
     const fetchPendingCashRequests = useCallback(async () => {
         try {
-            const response = await fetch('/washerman/pendingCashRequests', {
+            const response = await fetch(`${BACKEND_URL}/washerman/pendingCashRequests`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -87,7 +89,7 @@ const Collectcloths = () => {
 
     const acceptRecord = async (studentIndex, recordIndex, roll) => {
         try {
-            const response = await fetch('/washerman/wing/accept', {
+            const response = await fetch(`${BACKEND_URL}/washerman/wing/accept`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -115,7 +117,7 @@ const Collectcloths = () => {
 
     const acceptCashPayment = async (studentIndex, cashIndex, roll) => {
         try {
-            const response = await fetch('/washerman/acceptCashPayment', {
+            const response = await fetch(`${BACKEND_URL}/washerman/acceptCashPayment`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -247,3 +249,4 @@ const Collectcloths = () => {
 };
 
 export default Collectcloths;
+
