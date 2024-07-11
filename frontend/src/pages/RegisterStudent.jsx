@@ -265,5 +265,4 @@ function RegisterStudent(){
         </div>
     );
 }
-
 export default RegisterStudent;
