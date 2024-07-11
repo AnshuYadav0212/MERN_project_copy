@@ -6,7 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
-const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||'http://localhost:8080';
+const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||'http://localhost:8000';
 function Login() {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
