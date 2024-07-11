@@ -3,6 +3,8 @@ import Button from '@mui/material/Button';
 import "./calendarTop.css";
 import Cookies from "js-cookie";
 
+const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||'http://localhost:8080';
+
 const CalendarTop2 = ({ user, onLogout }) => {
   const [upcomingDate, setUpcomingDate] = useState(null);
   const [washermanName, setWashermanName] = useState(null);
@@ -15,7 +17,7 @@ const CalendarTop2 = ({ user, onLogout }) => {
   useEffect(() => {
     const fetchUpcomingDate = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/student/fetchUpcomingDate`, {
+        const response = await fetch(`${BACKEND_URL}/student/fetchUpcomingDate`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
