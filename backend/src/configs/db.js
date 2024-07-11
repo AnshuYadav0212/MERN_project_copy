@@ -6,7 +6,10 @@ const connectDB = async () => {
     const uri =
       "mongodb+srv://anshuyad23:PcHxdSYXDrpNHalu@dbms-project.4z3vfuk.mongodb.net/DBMS-project";
 
-    await mongoose.connect(uri);
+    await mongoose.connect(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log("Successfully Connected to MongoDB Atlas cloud");
   } catch (error) {
     console.error("Error in connecting to MongoDB Atlas cloud:", error);
@@ -15,3 +18,4 @@ const connectDB = async () => {
 };
 
 export default connectDB;
+
