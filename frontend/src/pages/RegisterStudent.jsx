@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||'http://localhost:8080';
+
 function RegisterStudent(){
     const [formData, setFormData] = useState({
         name: '',
@@ -82,7 +84,7 @@ function RegisterStudent(){
             return;
         }
 
-        const response = await fetch('/student/register', {
+        const response = await fetch(`${BACKEND_URL}/student/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -114,7 +116,7 @@ function RegisterStudent(){
     };
 
     const sendOtpRequest = async () => {
-        const response = await fetch('/sendAuthCode', {
+        const response = await fetch(`${BACKEND_URL}/sendAuthCode`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
