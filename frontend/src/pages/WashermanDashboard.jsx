@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 import Cookies from "js-cookie";
 
-const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||'http://localhost:8080';
+const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||'http://localhost:8000';
 
 function WashermanDashboard(){
     const navigate = useNavigate();
