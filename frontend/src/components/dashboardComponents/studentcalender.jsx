@@ -11,7 +11,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import "./calendarApp.css";
 import './footerwashdash.css';
 
-const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||"http://localhost:8080";
+const BACKEND_URL=process.env.REACT_APP_BACKEND_URL||"http://localhost:8000";
 
 const StudentCalendar = () => {
     const [selectedDate, setSelectedDate] = useState(null);
